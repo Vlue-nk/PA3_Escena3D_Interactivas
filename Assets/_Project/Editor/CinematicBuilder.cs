@@ -122,7 +122,7 @@ namespace PA3.EditorTools
             var director = root.AddComponent<PlayableDirector>();
             director.playableAsset = timeline;
             director.playOnAwake = false;
-            director.extrapolationMode = DirectorWrapMode.Hold;
+            director.extrapolationMode = DirectorWrapMode.None;
             director.SetReferenceValue(new PropertyName("IntroCamera"), camera);
             var controller = root.AddComponent<IntroSequenceController>();
             controller.Director = director;
