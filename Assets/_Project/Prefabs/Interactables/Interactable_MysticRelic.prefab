@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2277945245685420081}
   - component: {fileID: 768692972228250164}
   - component: {fileID: 575452629821631688}
+  - component: {fileID: 571021622124158667}
   m_Layer: 0
   m_Name: Interactable_MysticRelic
   m_TagString: Untagged
@@ -54,6 +55,7 @@ MonoBehaviour:
   CoreRenderer: {fileID: 6930300382984961298}
   PulseLight: {fileID: 9134848410396105229}
   CooldownSeconds: 2
+  Journey: {fileID: 0}
 --- !u!135 &575452629821631688
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -75,6 +77,29 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3.35
   m_Center: {x: 0, y: 1.4, z: 0}
+--- !u!136 &571021622124158667
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029317170664140649}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2.3
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.15, z: 0}
 --- !u!1 &1668185867155973658
 GameObject:
   m_ObjectHideFlags: 0

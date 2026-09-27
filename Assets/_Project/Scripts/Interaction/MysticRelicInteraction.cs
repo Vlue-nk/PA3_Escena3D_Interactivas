@@ -10,6 +10,10 @@ namespace PA3.Interaction
         public Renderer CoreRenderer;
         public Light PulseLight;
         public float CooldownSeconds = 2f;
+        public SanctuaryJourney Journey;
+        public bool InReach { get; private set; }
+        public bool IsAwakened { get; private set; }
+        private Vector3 coreOrigin;
 
         private static readonly int EmissionStrengthId = Shader.PropertyToID("_EmissionStrength");
         private MaterialPropertyBlock propertyBlock;
@@ -19,17 +23,35 @@ namespace PA3.Interaction
         {
             propertyBlock = new MaterialPropertyBlock();
             if (PulseLight != null) PulseLight.intensity = 0f;
+            if (CoreRenderer != null) coreOrigin = CoreRenderer.transform.localPosition;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.CompareTag("Player")) return;
-            Activate();
+            if (other.GetComponentInParent<FirstPersonController>() == null) return;
+            InReach = true;
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.GetComponentInParent<FirstPersonController>() != null) InReach = false;
+        }
+
+        private void Update()
+        {
+            if (CoreRenderer != null)
+            {
+                CoreRenderer.transform.localPosition = coreOrigin + Vector3.up * (.09f * Mathf.Sin(Time.time * 1.7f));
+                CoreRenderer.transform.Rotate(0, 20 * Time.deltaTime, 0, Space.Self);
+            }
+            if (InReach && !IsAwakened && (Journey == null || Journey.Ready) && Cursor.lockState == CursorLockMode.Locked && Input.GetKeyDown(KeyCode.E)) Activate();
         }
 
         public void Activate()
         {
-            if (Time.time < lastActivation + CooldownSeconds) return;
+            if (IsAwakened || Time.time < lastActivation + CooldownSeconds) return;
+            IsAwakened = true;
+            if (Journey != null) Journey.RegisterAwakening();
             lastActivation = Time.time;
             if (ActivationVfx != null)
             {
@@ -57,10 +79,15 @@ namespace PA3.Interaction
                     propertyBlock.SetFloat(EmissionStrengthId, Mathf.Lerp(2.7f, 8f, pulse));
                     CoreRenderer.SetPropertyBlock(propertyBlock);
                 }
-                if (PulseLight != null) PulseLight.intensity = Mathf.Lerp(0f, 5f, pulse);
+                if (PulseLight != null) PulseLight.intensity = Mathf.Lerp(1.5f, 5f, pulse);
                 yield return null;
             }
-            if (PulseLight != null) PulseLight.intensity = 0f;
+            if (PulseLight != null) PulseLight.intensity = 1.5f;
+            if (CoreRenderer != null)
+            {
+                propertyBlock.SetFloat(EmissionStrengthId, 5f);
+                CoreRenderer.SetPropertyBlock(propertyBlock);
+            }
         }
     }
 }
